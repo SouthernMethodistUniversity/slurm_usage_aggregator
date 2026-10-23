@@ -1,5 +1,5 @@
 {
-    "cluster_name": "m3",
+    "cluster name": "m3",
     "start_time": "2026-10-20T00:00:00",
     "end_time": "2026-10-22T23:59:59",
     "sacct": "/hpc/sys/apps/slurm/current/bin/sacct",

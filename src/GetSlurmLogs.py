@@ -34,8 +34,8 @@ def get_slurm_log(config, start_time, end_time):
         flags,
         outputs,
         states,
-        start_time,
-        end_time
+        start_time.strftime('%Y-%m-%dT%T'),
+        end_time.strftime('%Y-%m-%dT%T')
     )
     result = subprocess.run(shlex.split(cmd), env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
     if result.returncode == 0:
