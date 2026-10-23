@@ -1,0 +1,30 @@
+[project]
+name = "slurm-usage-aggregator"
+authors = [
+  {name = "John LaGrone", email = "jlagrone@smu.edu"},
+]
+maintainers = [
+  {name = "John LaGrone", email = "jlagrone@smu.edu"}
+]
+version = "0.1.0"
+description = "A simple slurm usage aggregator"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=3.1.0",
+    "pyarrow>=26.0.0",
+]
+license = "BSD-3-Clause)"
+license-files = ["LICEN[CS]E*"]
+keywords = ["slurm", "hpc", "aggregate", "metrics"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: BSD License",
+  "Topic :: System :: Monitoring",
+  "Topic :: Utilities"
+]
+
+[project.urls]
+Repository = "https://github.com/SouthernMethodistUniversity/slurm_usage_aggregator.git"
+Issues = "https://github.com/SouthernMethodistUniversity/slurm_usage_aggregator/issues"
