@@ -1,0 +1,7 @@
+{
+    "cluster_name": "m3",
+    "start_time": "2023-01-01T00:00:00",
+    "end_time": "2024-09-30T23:59:59",
+    "sacct": "/hpc/sys/apps/slurm/current/bin/sacct",
+    "output directory": "/users/jlagrone/m3/staged_slurm_logs"
+}
