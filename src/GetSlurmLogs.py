@@ -53,7 +53,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     try:
-        with open(args.metrics, 'r', encoding='utf-8') as file:
+        with open(args.config, 'r', encoding='utf-8') as file:
             orig_config = json.load(file)
         config = orig_config.copy()
     except Exception as e:
@@ -75,7 +75,7 @@ if __name__ == "__main__":
             config['end_time'] = end_time.strftime('%Y-%m-%dT%T')
     
             # save new config so the next run has the correct times
-            with open(args.metrics, 'w') as f:
+            with open(args.config, 'w') as f:
                 json.dump(config, f)
         except Exception as e:
             sys.exit("failed to save logs to {}: {}.".format(outpath, e))
