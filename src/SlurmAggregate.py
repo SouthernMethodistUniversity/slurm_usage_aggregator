@@ -57,7 +57,7 @@ def ingest_file(file_path, config):
 
         # split out TRES info
         for key, vals in config["AllocTRES"].items():
-            usage_df[key] = usage_df['AllocTRES'].str.extract(vals['pattern']).fillna(vals['default']).astype(vals['type'])
+            usage_df[key] = usage_df['AllocTRES'].str.extract(vals['pattern']).fillna(str(vals['default'])).astype(vals['type'])
             normalize_mem = vals.get("normalize memory units", False)
             if normalize_mem:
                 usage_df['mem unit'] = usage_df['AllocTRES'].str.extract('mem=\\d*(\\D),')
