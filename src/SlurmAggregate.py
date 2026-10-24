@@ -126,11 +126,12 @@ def get_formatting_order(df, config):
     aggregate_cols = []
     if config['aggregate_users']:
         aggregate_cols.append('User')
-        
+    if config['aggregate_accounts']:
+        aggregate_cols.append('Account')
     if config['aggregate_qos']:
         aggregate_cols.append('QOS')
     
-    if config['aggregate_cluster']:
+    if config['aggregate_clusters']:
         aggregate_cols.append('Cluster')
         
     allowed_cols = (set(possible_cols) & set(avail_cols)) - set(aggregate_cols)
@@ -232,8 +233,9 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--end', help="End date (ISOformat, e.g. YYYY-MM-DD) to filter returns. Filter is inclusive (includes the specified date.) Does not filter if not specified.",
                         type=datetime.date.fromisoformat)
     parser.add_argument('--silent', help="Do not print account information", default=False, action='store_true')
-    parser.add_argument('--aggregate_cluster', help="Aggregate output cluster data (combine date for all clusters)", default=False, action='store_true')
+    parser.add_argument('--aggregate_clusters', help="Aggregate output cluster data (combine date for all clusters)", default=False, action='store_true')
     parser.add_argument('--aggregate_qos', help="Aggregate output qos data (combine data for all qos names)", default=False, action='store_true')
+    parser.add_argument('--aggregate_accounts', help="Aggregate output account data (combine data for all accounts)", default=False, action='store_true')
     parser.add_argument('--aggregate_users', help="Aggregate output user data (combine data for all users)", default=False, action='store_true')
     parser.add_argument('-m', '--metrics', help="Path to metrics config file. Defaults to looking in $HOME/.slurm_usage_aggregator/metrics.json and falls back to basic settings.")
 
@@ -335,11 +337,16 @@ if __name__ == "__main__":
     else:
         config['silent'] = False
 
-    if args.aggregate_cluster:
-        config['aggregate_cluster'] = True
+    if args.aggregate_clusters:
+        config['aggregate_clusters'] = True
     else:
-        config['aggregate_cluster'] = False
-        
+        config['aggregate_clusters'] = False
+
+    if args.aggregate_accounts:
+        config['aggregate_accounts'] = True
+    else:
+        config['aggregate_accounts'] = False
+
     if args.aggregate_qos:
         config['aggregate_qos'] = True
     else:
@@ -350,7 +357,7 @@ if __name__ == "__main__":
     else:
         config['aggregate_users'] = False
         
-    if config['aggregate_users'] and config['aggregate_qos'] and config['aggregate_cluster']:
+    if config['aggregate_users'] and config['aggregate_accounts'] and config['aggregate_qos'] and config['aggregate_clusters']:
         sys.exit('Cannot produce output with the provided aggregate flags. Please remove at least one.')
 
     if args.start:
