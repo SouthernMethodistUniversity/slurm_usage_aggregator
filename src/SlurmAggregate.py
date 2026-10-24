@@ -140,25 +140,22 @@ def get_formatting_order(df, config):
     
 def print_usage(usage, config):
 
-    if config['aggregate_cluster']:
-        max_lengths = [7, 4, 9, 9, 12, 9]
-    else:
-        max_lengths = [7, 7, 4, 9, 9, 12, 9]
-    for line in usage:
-        for i in range(0,len(line)):
-            max_lengths[i] = max(int(max_lengths[i]), int(len(str(line[i]))))
-            
     # figure out spacing
     max_lengths = []
     for col in config['print columns']:
         max_lengths.append(len(col))
+
+    for i in range(0,len(usage)):
+        line = usage[i]
+        for j in range(0, len(config['print columns'])):
+            max_lengths[j] = max(int(max_lengths[j]), int(len(str(line[j]))))
 
     total_len = 0
     for i in range(0, len(max_lengths)):
         max_lengths[i] += 3
         total_len += max_lengths[i]
 
-    tmp_str = "{}: <{}}".format(config['print columns'][0], max_lengths[0])
+    tmp_str = "{: <{}}".format(config['print columns'][0], max_lengths[0])
     for i in range(1, len(config['print columns'])):
         tmp_str += "{: >{}}".format(config['print columns'][i], max_lengths[i])
     print(tmp_str)
@@ -166,9 +163,9 @@ def print_usage(usage, config):
     print('=' * total_len)
     for i in range(0,len(usage)):
         line = usage[i]
-        tmp_str = "{}: <{}}".format(line[0], max_lengths[0])
-        for i in range(1, len(config['print columns'])):
-            tmp_str += "{: >{}}".format(line[i], max_lengths[i])
+        tmp_str = "{: <{}}".format(line[0], max_lengths[0])
+        for j in range(1, len(config['print columns'])):
+            tmp_str += "{: >{}}".format(line[j], max_lengths[j])
         print(tmp_str)
 
         
