@@ -121,7 +121,7 @@ def merge_ingested_data(df, new_data, config):
         
 def get_formatting_order(df, config):
     
-    possible_cols = ['Cluster', 'Account', 'User', 'QOS'] + list(["AllocTRES"]) + ['Wait Time']
+    possible_cols = ['Cluster', 'Account', 'User', 'QOS'] + list(config["AllocTRES"]) + ['Wait Time']
     avail_cols = df.columns.tolist()
     aggregate_cols = []
     if config['aggregate_users']:
@@ -204,7 +204,9 @@ def parse_usage(df, config):
         elif col in config['print columns']:
             # take first value of text col
             agg_dict[col] = "first"
-    agg_df = tmp_df[data_cols].groupby(group_by_cols).aggregate(agg_dict).reset_index().sort_values(config['print columns'][0])
+
+    agg_df = tmp_df[data_cols].groupby(group_by_cols).aggregate(agg_dict).reset_index(drop=True).sort_values(config['print columns'][0])
+
     for col in cols_to_round:
         agg_df[col] = agg_df[col].round(3)
     for index, row in agg_df.iterrows():
@@ -386,7 +388,7 @@ if __name__ == "__main__":
         else:
             df = pd.DataFrame()
 
-        df = merge_ingested_data(df, ingested_df)
+        df = merge_ingested_data(df, ingested_df, config)
 
         df.to_feather(config['data_path'])
 
