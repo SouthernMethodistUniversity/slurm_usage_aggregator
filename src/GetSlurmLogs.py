@@ -6,7 +6,6 @@ from pathlib import Path
 import argparse
 import sys
 
-
 current_time = datetime.now()
 current_time_utc = datetime.now(timezone.utc)
 print(current_time)

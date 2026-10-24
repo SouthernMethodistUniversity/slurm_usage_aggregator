@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 import sys
 import json
+import re
 
 def get_all_accounts(df):
 
@@ -57,10 +58,10 @@ def ingest_file(file_path, config):
         
         # split out TRES info
         for key, vals in config["AllocTRES"]:
-            tmp = usage_df['AllocTRES'].str.extract(r"{vals['pattern']}").astype(vals['type'])
+            tmp = usage_df['AllocTRES'].str.extract(re.escape(vals['pattern'])).astype(vals['type'])
             normalize_mem = vals.get("normalize memory units", False)
             if normalize_mem:
-                mem_unit = usage_df['AllocTRES'].str.extract('mem=\d*(\D),')
+                mem_unit = usage_df['AllocTRES'].str.extract(r'mem=\d*(\D),')
                 tmp[mem_unit == 'T'] = tmp[mem_unit == 'T'] * 1024
                 tmp[mem_unit == 'M'] = tmp[mem_unit == 'M'] / 1024
                 tmp[mem_unit == 'K'] = tmp[mem_unit == 'K'] / (1024 * 1024)
@@ -251,18 +252,18 @@ if __name__ == "__main__":
     # default metrics values
     config["AllocTRES"] = {
         "CPU Hours": {
-            "pattern": "cpu=(\d*),",
+            "pattern": r"cpu=(\\d*),",
             "default": 0,
             "type": "int32"
         },
         "Memory Hours": {
-            "pattern": "cpu=(\d*),",
+            "pattern": "mem=(\\d*),",
             "default": 0,
             "type": "float64",
             "normalize memory units": True
         },
         "GPU Hours": {
-            "pattern": "gres\/gpu=(\d*),",
+            "pattern": "gres\\/gpu=(\\d*),",
             "default": 0,
             "type": "int32"
         }

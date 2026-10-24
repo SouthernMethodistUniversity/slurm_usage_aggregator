@@ -1,28 +1,28 @@
 {
     "AllocTRES": { 
         "CPU Hours": {
-            "pattern": "cpu=(\d*),",
+            "pattern": "cpu=(\\d*),",
             "default": 0,
             "type": "int32"
         },
         "Memory Hours": {
-            "pattern": "cpu=(\d*),",
+            "pattern": "mem=(\\d*),",
             "default": 0,
             "type": "float64",
             "normalize memory units": true
         },
         "GPU Hours": {
-            "pattern": "gres\/gpu=(\d*),",
+            "pattern": "gres\\/gpu=(\\d*),",
             "default": 0,
             "type": "int32"
         },
         "V100 GPU Hours": {
-            "pattern": "gres\/gpu:v100=(\d),",
+            "pattern": "gres\\/gpu:v100=(\\d),",
             "default": 0,
             "type": "int32"
         },
         "A100 GPU Hours": {
-            "pattern": "gres\/gpu:a100=(\d),",
+            "pattern": "gres\\/gpu:a100=(\\d),",
             "default": 0,
             "type": "int32"
         }
