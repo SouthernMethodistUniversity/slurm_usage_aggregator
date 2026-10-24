@@ -124,7 +124,7 @@ def get_formatting_order(df, config):
     possible_cols = ['Cluster', 'Account', 'User', 'QOS'] + config["AllocTRES"].keys() + ['Wait Time']
     avail_cols = df.columns.tolist()
     aggregate_cols = []
-    if config['aggregate_user']:
+    if config['aggregate_users']:
         aggregate_cols.append('User')
         
     if config['aggregate_qos']:
@@ -346,12 +346,12 @@ if __name__ == "__main__":
     else:
         config['aggregate_qos'] = False
         
-    if args.aggregate_user:
-        config['aggregate_user'] = True
+    if args.aggregate_users:
+        config['aggregate_users'] = True
     else:
-        config['aggregate_user'] = False
+        config['aggregate_users'] = False
         
-    if config['aggregate_user'] and config['aggregate_qos'] and config['aggregate_cluster']:
+    if config['aggregate_users'] and config['aggregate_qos'] and config['aggregate_cluster']:
         sys.exit('Cannot produce output with the provided aggregate flags. Please remove at least one.')
 
     if args.start:
