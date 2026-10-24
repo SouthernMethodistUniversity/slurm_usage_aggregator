@@ -4,7 +4,6 @@ from pathlib import Path
 import pandas as pd
 import sys
 import json
-import re
 
 def get_all_accounts(df):
 
@@ -55,18 +54,19 @@ def ingest_file(file_path, config):
         # compute wait times and run times
         wait_df['Wait Time'] = (wait_df['Start'] - wait_df['Submit']).dt.total_seconds() / 3600.0
         usage_df['Run Time'] = (usage_df['End'] - usage_df['Start']).dt.total_seconds() / 3600.0
-        
+
         # split out TRES info
-        for key, vals in config["AllocTRES"]:
-            tmp = usage_df['AllocTRES'].str.extract(re.escape(vals['pattern'])).astype(vals['type'])
+        for key, vals in config["AllocTRES"].items():
+            usage_df[key] = usage_df['AllocTRES'].str.extract(vals['pattern']).fillna(vals['default']).astype(vals['type'])
             normalize_mem = vals.get("normalize memory units", False)
             if normalize_mem:
-                mem_unit = usage_df['AllocTRES'].str.extract(r'mem=\d*(\D),')
-                tmp[mem_unit == 'T'] = tmp[mem_unit == 'T'] * 1024
-                tmp[mem_unit == 'M'] = tmp[mem_unit == 'M'] / 1024
-                tmp[mem_unit == 'K'] = tmp[mem_unit == 'K'] / (1024 * 1024)
-            tmp = tmp.fillna(0)
-            usage_df[key] = tmp * usage_df['Run Time']
+                usage_df['mem unit'] = usage_df['AllocTRES'].str.extract('mem=\\d*(\\D),')
+                usage_df[usage_df['mem unit'] == 'T'][key] = usage_df[usage_df['mem unit'] == 'T'][key] * 1024
+                usage_df[usage_df['mem unit'] == 'M'][key] = usage_df[usage_df['mem unit'] == 'M'][key] / 1024
+                usage_df[usage_df['mem unit'] == 'K'][key] = usage_df[usage_df['mem unit'] == 'K'][key] / (1024 * 1024)
+                usage_df = usage_df.drop(columns='mem unit')
+
+            usage_df[key] = usage_df['Run Time'] * usage_df[key]
 
         wait_aggregate_data = []
         for edge in date_edges:
