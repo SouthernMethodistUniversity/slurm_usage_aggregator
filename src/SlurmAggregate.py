@@ -61,9 +61,9 @@ def ingest_file(file_path, config):
             normalize_mem = vals.get("normalize memory units", False)
             if normalize_mem:
                 usage_df['mem unit'] = usage_df['AllocTRES'].str.extract('mem=\\d*(\\D),')
-                usage_df[usage_df['mem unit'] == 'T'][key] = usage_df[usage_df['mem unit'] == 'T'][key] * 1024
-                usage_df[usage_df['mem unit'] == 'M'][key] = usage_df[usage_df['mem unit'] == 'M'][key] / 1024
-                usage_df[usage_df['mem unit'] == 'K'][key] = usage_df[usage_df['mem unit'] == 'K'][key] / (1024 * 1024)
+                usage_df.loc[usage_df['mem unit'] == 'T', key] = usage_df[usage_df['mem unit'] == 'T'][key] * 1024
+                usage_df.loc[usage_df['mem unit'] == 'M', key] = usage_df[usage_df['mem unit'] == 'M'][key] / 1024
+                usage_df.loc[usage_df['mem unit'] == 'K', key] = usage_df[usage_df['mem unit'] == 'K'][key] / (1024 * 1024)
                 usage_df = usage_df.drop(columns='mem unit')
 
             usage_df[key] = usage_df['Run Time'] * usage_df[key]
