@@ -70,7 +70,7 @@ def ingest_file(file_path, config):
 
         wait_aggregate_data = []
         for edge in date_edges:
-            start_time = edge - pd.to_timedelta(1, unit='d')
+            start_time = edge - pd.to_timedelta(1, unit='D')
             mask = ((wait_df['Submit'] >= start_time) & (wait_df['Submit'] < edge))
             tmp_df = wait_df.loc[mask]
             
@@ -82,10 +82,10 @@ def ingest_file(file_path, config):
 
         usage_aggregate_data = []
         for edge in date_edges:
-            start_time = edge - pd.to_timedelta(1, unit='d')
+            start_time = edge - pd.to_timedelta(1, unit='D')
             mask = ((usage_df['Start'] >= start_time) & (usage_df['Start'] < edge))
             tmp_df = usage_df.loc[mask]
-            agg_df = tmp_df[['Account', 'User', 'Cluster', 'QOS'] + config["AllocTRES"].keys()].groupby(['Account', 'User', 'Cluster', 'QOS']).aggregate('sum')
+            agg_df = tmp_df[['Account', 'User', 'Cluster', 'QOS'] + list(config["AllocTRES"])].groupby(['Account', 'User', 'Cluster', 'QOS']).aggregate('sum')
 
             if not agg_df.empty:
                 agg_df['Date'] = start_time
@@ -108,7 +108,7 @@ def merge_ingested_data(df, new_data, config):
         if df.empty:
             return new_data
         else:
-            cols = ['Wait Time'] + config["AllocTRES"].keys()
+            cols = ['Wait Time'] + list(config["AllocTRES"])
             for col in cols:
                 new_data = new_data.rename(columns={col: 'New {}'.format(col)})
 
@@ -121,7 +121,7 @@ def merge_ingested_data(df, new_data, config):
         
 def get_formatting_order(df, config):
     
-    possible_cols = ['Cluster', 'Account', 'User', 'QOS'] + config["AllocTRES"].keys() + ['Wait Time']
+    possible_cols = ['Cluster', 'Account', 'User', 'QOS'] + list(["AllocTRES"]) + ['Wait Time']
     avail_cols = df.columns.tolist()
     aggregate_cols = []
     if config['aggregate_users']:
@@ -195,7 +195,7 @@ def parse_usage(df, config):
     group_by_cols = ['User', 'Cluster', 'Account', 'QOS']
     group_by_cols = list(set(group_by_cols) - set(config['aggregate columns']))
     data_cols = list(set(group_by_cols + config['print columns']))
-    cols_to_round = ['Wait Time'] + config["AllocTRES"].keys()
+    cols_to_round = ['Wait Time'] + list(config["AllocTRES"])
     agg_dict = {}
     for col in data_cols:
         if col in cols_to_round:
