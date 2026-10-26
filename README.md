@@ -3,6 +3,13 @@ Scripts to generate aggregate data of Slurm usage
 
 ## About
 
+The main purpose of this collection of scripts is to consistently extract
+usage information from Slurm usage.
+
+It was created specifically to track some metrics that are not readily available
+in other tools (like Open XDMoD) such as memory usage and specific types of GPUs.
+It is not a replacement for those other tools.
+
 ## Usage
 
 ### Getting Slurm log data
